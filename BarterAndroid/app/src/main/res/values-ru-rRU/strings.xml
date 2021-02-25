@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Бартер</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="action_sign_in">Войти</string>
+    <string name="action_sign_in_short">Войти</string>
+    <string name="welcome">Добро пожаловать</string>
+    <string name="login_failed">Неверный логин или пароль</string>
+    <string name="action_sign_up">Зарегистрироваться</string>
+    <string name="invalid_username">Неверный логин</string>
+    <string name="invalid_password">Пароль должен содержать не менее 8  симвлов</string>
+</resources>
