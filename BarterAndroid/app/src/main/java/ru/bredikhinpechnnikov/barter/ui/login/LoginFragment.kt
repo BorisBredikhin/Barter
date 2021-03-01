@@ -15,8 +15,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
-
 import ru.bredikhinpechnnikov.barter.R
+
+//import ru.bredikhinpechnnikov.barter.R
 
 class LoginFragment : Fragment() {
 
@@ -38,6 +39,7 @@ class LoginFragment : Fragment() {
         val usernameEditText = view.findViewById<EditText>(R.id.username)
         val passwordEditText = view.findViewById<EditText>(R.id.password)
         val loginButton = view.findViewById<Button>(R.id.login)
+        val registerButton = view.findViewById<Button>(R.id.register_btn)
         val loadingProgressBar = view.findViewById<ProgressBar>(R.id.loading)
 
         loginViewModel.loginFormState.observe(this,
@@ -100,6 +102,13 @@ class LoginFragment : Fragment() {
                     usernameEditText.text.toString(),
                     passwordEditText.text.toString()
             )
+        }
+
+        registerButton.setOnClickListener {
+            fragmentManager!!
+                .beginTransaction()
+                .replace(R.id.fragment, RegisterFragment())
+                .commit()
         }
     }
 
