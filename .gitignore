@@ -1,5 +1,6 @@
 .gradle/
-BarterAndroid/.idea/caches
-BarterAndroid/.idea/libraries
+BarterAndroid/.idea/
 BarterAndroid/gradle
 *.pyc
+backend/.idea
+.idea/
