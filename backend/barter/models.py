@@ -1,89 +1,93 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from barter import validators
 
 
-class User(models.Model):
-    firstName = models.CharField(max_length=50)
-    lastName = models.CharField(max_length=50)
-    birthDay = models.DateField()
-    mail = models.EmailField()
-    phoneNumber = models.IntegerField()
-    primaryActivity = models.CharField(max_length=50)
-    photo = models.ImageField()
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    points = models.IntegerField()
+    photo = models.ImageField(null=True)
+    birthday = models.DateField(null=True)
+    primary_activity = models.CharField(max_length=150, null=True)
+    phone_number = models.IntegerField(null=True)
+    points = models.IntegerField(validators=[validators.non_negative_validator], default=0)
 
-    ratingAsCustomer = models.IntegerField()
-    ratingAsExecutor = models.IntegerField()
-    password = models.CharField(max_length=50)
+    def __str__(self):
+        return self.user.first_name + ' ' + self.user.last_name
 
 
-class ConfDataUser(models.Model):
+# noinspection PyUnusedLocal
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+
+# noinspection PyUnusedLocal
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
+
+class Category(models.Model):
+    title = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.title
+
+
+class UserAddress(models.Model):
     user = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
-    password = models.CharField(max_length=50)
-    score = models.IntegerField()
-
-
-class Categories(models.Model):
-    user = models.ManyToManyField(
-        User,
-    )
-    category = models.CharField(max_length=50)
-
-
-class AddressUser(models.Model):
-    user = models.OneToOneField(
-        User,
+        Profile,
         on_delete=models.CASCADE,
         primary_key=True,
     )
     country = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
     street = models.CharField(max_length=50)
-    house = models.IntegerField()
+    house = models.CharField(max_length=6) # могут быть номера домов вида 20а, 21/8
     room = models.IntegerField()
 
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
 
-class CurrentAddressUser(models.Model):
+
+class Rating(models.Model):
     user = models.OneToOneField(
-        User,
+        Profile,
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    latitude = models.DecimalField(max_digits=3, decimal_places=6)
-    longitude = models.DecimalField(max_digits=3, decimal_places=6)
+    rating_as_customer = models.FloatField(default=5.0)
+    rating_as_executor = models.FloatField(default=5.0)
 
+task_statuses = [
+    ("Новый", "Новый"),
+    ("Ожидает подтверждение", "Ожидает подтверждение"),
+    ("Подтверждён", "Подтверждён"),
+    ("Исполнен", "Исполнен"),
+]
 
-class Ratings(models.Model):
-    user = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
-    ratingAsCustomer = models.DecimalField(max_digits=4, decimal_places=2)
-    ratingAsExecutor = models.DecimalField(max_digits=4, decimal_places=2)
-
-
-class Tasks(models.Model):
-    customer = models.ForeignKey(User, on_delete=models.PROTECT)
-    executor = models.ForeignKey(User, on_delete=models.PROTECT)
+class Task(models.Model):
+    customer = models.ForeignKey(Profile, on_delete=models.PROTECT, related_name="customer")
+    executor = models.ForeignKey(Profile, on_delete=models.PROTECT, related_name="executor")
     title = models.CharField(max_length=50)
     description = models.TextField()
-    price = models.IntegerField()
-    status = models.CharField(max_length=20)
+    price = models.IntegerField(validators=[validators.non_negative_validator])
+    status = models.CharField(max_length=21, choices=task_statuses)
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
 
 
 class Tag(models.Model):
-    task = models.ManyToManyField(Tasks)
+    task = models.ManyToManyField(Task)
     name = models.CharField(max_length=50)
 
 
-class AddressTask(models.Model):
+class TaskAddress(models.Model):
     task = models.OneToOneField(
-        Tasks,
+        Task,
         on_delete=models.CASCADE,
         primary_key=True,
     )
@@ -94,12 +98,11 @@ class AddressTask(models.Model):
     room = models.IntegerField()
 
 
-class Reviews(models.Model):
-    fromId = models.ForeignKey(User, on_delete=models.RESTRICT)
-    toId = models.ForeignKey(User, on_delete=models.RESTRICT)
-    task = models.ForeignKey(Tasks, on_delete=models.RESTRICT)
-    reviewDate = models.DateTimeField()
-    reviewText = models.TextField()
-    rating = models.IntegerField()
+class Review(models.Model):
+    from_user = models.ForeignKey(Profile, on_delete=models.RESTRICT, related_name="from_user")
+    to_user = models.ForeignKey(Profile, on_delete=models.RESTRICT, related_name="to_user")
+    task = models.ForeignKey(Task, on_delete=models.RESTRICT)
+    review_date = models.DateTimeField()
+    review_text = models.TextField()
     status_to = models.CharField(max_length=50)
 # Create your models here.
