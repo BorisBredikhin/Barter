@@ -1,13 +1,28 @@
+
 package ru.bredikhinpechnnikov.barter.ui.login
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import ru.bredikhinpechnnikov.barter.R
+import java.io.*
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,6 +51,12 @@ class RegisterFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_register, container, false)
         view.findViewById<Button>(R.id.photo_uploader_btn).setOnClickListener {
+            val permissionStatus = ContextCompat.checkSelfPermission(view.context, Manifest.permission.READ_EXTERNAL_STORAGE)
+
+            if (permissionStatus == PackageManager.PERMISSION_DENIED)
+                ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+
+
             val intent = Intent()
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT
@@ -44,6 +65,48 @@ class RegisterFragment : Fragment() {
         // Inflate the layout for this fragment
         return view
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (data == null)
+            return
+
+        val photoFile = createImageFile()
+
+        val inputStream = activity!!.contentResolver.openInputStream(data.data!!)
+        val decodeStream = BitmapFactory.decodeStream(inputStream)
+        view!!.findViewById<ImageView>(R.id.photo_uploader).setImageBitmap(decodeStream)
+        inputStream!!.close()
+    }
+
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File? {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
+        val imageFileName = "JPEG_" + timeStamp + "_"
+        val storageDir = activity!!.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",  /* suffix */
+                storageDir /* directory */
+        )
+
+        // Save a file: path for use with ACTION_VIEW intents
+        return image
+    }
+
+    @Throws(IOException::class)
+    fun copyStream(input: InputStream, output: OutputStream) {
+        val buffer = ByteArray(1024)
+        var bytesRead: Int
+        while (input.read(buffer).also { bytesRead = it } != -1) {
+            output.write(buffer, 0, bytesRead)
+        }
+    }
+
 
     companion object {
         /**

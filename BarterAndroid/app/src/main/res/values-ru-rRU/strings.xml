@@ -11,4 +11,5 @@
     <string name="invalid_password">Пароль должен содержать не менее 8  симвлов</string>
     <string name="log_in">Вход</string>
     <string name="select_photo">Выбрать фото</string>
+    <string name="first_name">Имя</string>
 </resources>
