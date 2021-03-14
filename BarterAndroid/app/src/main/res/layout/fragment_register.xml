@@ -53,6 +53,56 @@
         android:hint="@string/first_name"
         android:layout_marginStart="20dp"/>
 
+
+    <EditText
+        android:id="@+id/last_name"
+        android:layout_width="150sp"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        app:layout_constraintStart_toStartOf="@id/first_name"
+        app:layout_constraintTop_toBottomOf="@id/first_name"
+        android:hint="@string/last_name"/>
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="150sp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="@id/last_name"
+        app:layout_constraintTop_toBottomOf="@id/last_name"
+        android:hint="@string/nickname"/>
+    <EditText
+        android:id="@+id/birthday"
+        android:layout_width="150sp"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        app:layout_constraintStart_toStartOf="@id/username"
+        app:layout_constraintTop_toBottomOf="@id/username"
+        android:hint="@string/born_date"/>
+    <EditText
+        android:id="@+id/primary_activity"
+        android:layout_width="150sp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        app:layout_constraintTop_toBottomOf="@id/birthday"
+        app:layout_constraintStart_toStartOf="@id/birthday"
+        android:hint="@string/primary_activity"/>
+    <EditText
+        android:id="@+id/phone_number"
+        android:layout_width="150sp"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        app:layout_constraintTop_toBottomOf="@id/primary_activity"
+        app:layout_constraintStart_toStartOf="@id/primary_activity"
+        android:hint="@string/phone_number"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_register"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
     <ProgressBar
         android:id="@+id/loading"
         android:layout_width="wrap_content"

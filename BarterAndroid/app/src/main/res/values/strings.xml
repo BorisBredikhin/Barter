@@ -17,4 +17,10 @@
     <string name="profile_photio">Фото профили</string>
     <string name="select_photo">Выбрать фото</string>
     <string name="first_name">Имя</string>
+    <string name="last_name">Фамилия:</string>
+    <string name="nickname">Ник:</string>
+    <string name="born_date">Дата рождения</string>
+    <string name="primary_activity">Основной род деятельности</string>
+    <string name="phone_number">Телефон</string>
+    <string name="action_register">Зарегистрироваться</string>
 </resources>
