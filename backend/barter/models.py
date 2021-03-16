@@ -38,12 +38,7 @@ class Category(models.Model):
         return self.title
 
 
-class UserAddress(models.Model):
-    user = models.OneToOneField(
-        Profile,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
+class Address(models.Model):
     country = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
     street = models.CharField(max_length=50)
@@ -52,6 +47,17 @@ class UserAddress(models.Model):
 
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class UserAddress(Address):
+    user = models.OneToOneField(
+        Profile,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
 
 
 class Rating(models.Model):
@@ -85,18 +91,12 @@ class Tag(models.Model):
     name = models.CharField(max_length=50)
 
 
-class TaskAddress(models.Model):
+class TaskAddress(Address):
     task = models.OneToOneField(
         Task,
         on_delete=models.CASCADE,
         primary_key=True,
     )
-    country = models.CharField(max_length=50)
-    city = models.CharField(max_length=50)
-    street = models.CharField(max_length=50)
-    house = models.IntegerField()
-    room = models.IntegerField()
-
 
 class Review(models.Model):
     from_user = models.ForeignKey(Profile, on_delete=models.RESTRICT, related_name="from_user")
@@ -104,5 +104,4 @@ class Review(models.Model):
     task = models.ForeignKey(Task, on_delete=models.RESTRICT)
     review_date = models.DateTimeField()
     review_text = models.TextField()
-    status_to = models.CharField(max_length=50)
-# Create your models here.
+    status_to = models.CharField(max_length=21, choices=task_statuses)
