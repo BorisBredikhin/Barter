@@ -16,6 +16,7 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import ru.bredikhinpechnnikov.barter.R
+import ru.bredikhinpechnnikov.barter.ui.register.RegisterFragment
 
 //import ru.bredikhinpechnnikov.barter.R
 

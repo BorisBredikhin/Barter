@@ -7,7 +7,7 @@ import ru.bredikhinpechnnikov.barter.data.model.LoggedInUser
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository(val dataSource: LoginDataSource) {
+class LoginRepository(val dataSource: AuthDataSource) {
 
     // in-memory cache of the loggedInUser object
     var user: LoggedInUser? = null
@@ -36,6 +36,19 @@ class LoginRepository(val dataSource: LoginDataSource) {
         }
 
         return result
+    }
+
+    fun register(
+        firstName: String,
+        lastName: String,
+        username: String,
+        birthday: String,
+        primaryActivity: String,
+        phoneNumber: String,
+        password: String,
+        repeatedPassword: String
+    ): String{
+        return dataSource.register(firstName, lastName, username, birthday, primaryActivity, phoneNumber, password, repeatedPassword)
     }
 
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {

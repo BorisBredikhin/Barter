@@ -18,4 +18,5 @@
     <string name="primary_activity">Основной род деятельности</string>
     <string name="phone_number">Телефон</string>
     <string name="action_register">Зарегистрироваться</string>
+    <string name="password_repeat">Повторите пароль</string>
 </resources>

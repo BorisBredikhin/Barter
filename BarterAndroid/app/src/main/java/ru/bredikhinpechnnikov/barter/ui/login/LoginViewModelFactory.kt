@@ -2,7 +2,7 @@ package ru.bredikhinpechnnikov.barter.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import ru.bredikhinpechnnikov.barter.data.LoginDataSource
+import ru.bredikhinpechnnikov.barter.data.AuthDataSource
 import ru.bredikhinpechnnikov.barter.data.LoginRepository
 
 /**
@@ -16,7 +16,7 @@ class LoginViewModelFactory : ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             return LoginViewModel(
                     loginRepository = LoginRepository(
-                            dataSource = LoginDataSource()
+                            dataSource = AuthDataSource()
                     )
             ) as T
         }

@@ -1,10 +1,8 @@
-
-package ru.bredikhinpechnnikov.barter.ui.login
+package ru.bredikhinpechnnikov.barter.ui.register
 
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
@@ -13,12 +11,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import ru.bredikhinpechnnikov.barter.R
+import ru.bredikhinpechnnikov.barter.ui.login.LoginViewModel
+import ru.bredikhinpechnnikov.barter.ui.login.LoginViewModelFactory
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -35,6 +37,8 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class RegisterFragment : Fragment() {
+    private lateinit var loginViewModel: LoginViewModel
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -45,12 +49,33 @@ class RegisterFragment : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
+            .get(LoginViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_register, container, false)
-        view.findViewById<Button>(R.id.photo_uploader_btn).setOnClickListener {
+        // Inflate the layout for this fragment
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val uploadBtn = view.findViewById<Button>(R.id.photo_uploader_btn)
+        val photoUploader = view.findViewById<ImageView>(R.id.photo_uploader)
+        val firstNameField = view.findViewById<EditText>(R.id.first_name)
+        val lastNameField = view.findViewById<EditText>(R.id.last_name)
+        val usernameField = view.findViewById<EditText>(R.id.username)
+        val birthdayField = view.findViewById<EditText>(R.id.birthday)
+        val primaryActivityField = view.findViewById<EditText>(R.id.primary_activity)
+        val phoneNumberField = view.findViewById<EditText>(R.id.phone_number)
+        val passwordField = view.findViewById<EditText>(R.id.password)
+        val passwordRepeatField = view.findViewById<EditText>(R.id.password_repeat)
+        val registerBtn = view.findViewById<Button>(R.id.register_btn)
+
+        uploadBtn.setOnClickListener {
             val permissionStatus = ContextCompat.checkSelfPermission(view.context, Manifest.permission.READ_EXTERNAL_STORAGE)
 
             if (permissionStatus == PackageManager.PERMISSION_DENIED)
@@ -62,8 +87,19 @@ class RegisterFragment : Fragment() {
             intent.action = Intent.ACTION_GET_CONTENT
             startActivityForResult(Intent.createChooser(intent, "Выберите фото"), 1)
         }
-        // Inflate the layout for this fragment
-        return view
+
+        registerBtn.setOnClickListener {
+            loginViewModel.register(
+                firstNameField.text.toString(),
+                lastNameField.text.toString(),
+                usernameField.text.toString(),
+                birthdayField.text.toString(),
+                primaryActivityField.text.toString(),
+                phoneNumberField.text.toString(),
+                passwordField.text.toString(),
+                passwordRepeatField.text.toString()
+            )
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

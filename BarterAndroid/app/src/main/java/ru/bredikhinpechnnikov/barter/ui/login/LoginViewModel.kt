@@ -28,6 +28,19 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
         }
     }
 
+    fun register(
+        firstName: String,
+        lastName: String,
+        username: String,
+        birthday: String,
+        primaryActivity: String,
+        phoneNumber: String,
+        password: String,
+        repeatedPassword: String
+    ){
+        loginRepository.register(firstName, lastName, username, birthday, primaryActivity, phoneNumber, password, repeatedPassword)
+    }
+
     fun loginDataChanged(username: String, password: String) {
         if (!isUserNameValid(username)) {
             _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)

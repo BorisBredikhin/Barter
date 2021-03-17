@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
@@ -11,97 +11,121 @@
     android:paddingBottom="@dimen/fragment_vertical_margin"
     tools:context=".ui.login.LoginFragment">
 
-    <TextView
-        android:id="@+id/registration_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
-        android:text="@string/registration"
-        android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/photo_uploader"
-        android:layout_width="@dimen/photo_size"
-        android:layout_height="@dimen/photo_size"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/registration_title"
-        android:contentDescription="@string/profile_photio"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/photo_uploader_btn"
-        android:layout_width="@dimen/photo_size"
-        android:layout_height="wrap_content"
-        android:text="@string/select_photo"
-        app:layout_constraintTop_toBottomOf="@id/photo_uploader"
-        app:layout_constraintStart_toStartOf="@id/photo_uploader"/>
+        <TextView
+            android:id="@+id/registration_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="64dp"
+            android:text="@string/registration"
+            android:textSize="24sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
+        <ImageView
+            android:id="@+id/photo_uploader"
+            android:layout_width="@dimen/photo_size"
+            android:layout_height="@dimen/photo_size"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/registration_title"
+            android:contentDescription="@string/profile_photio"/>
 
-    <EditText
-        android:id="@+id/first_name"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toEndOf="@id/photo_uploader"
-        app:layout_constraintTop_toBottomOf="@id/registration_title"
-        android:hint="@string/first_name"
-        android:layout_marginStart="20dp"/>
+        <Button
+            android:id="@+id/photo_uploader_btn"
+            android:layout_width="@dimen/photo_size"
+            android:layout_height="wrap_content"
+            android:text="@string/select_photo"
+            app:layout_constraintTop_toBottomOf="@id/photo_uploader"
+            app:layout_constraintStart_toStartOf="@id/photo_uploader"/>
 
 
-    <EditText
-        android:id="@+id/last_name"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="@id/first_name"
-        app:layout_constraintTop_toBottomOf="@id/first_name"
-        android:hint="@string/last_name"/>
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        app:layout_constraintStart_toStartOf="@id/last_name"
-        app:layout_constraintTop_toBottomOf="@id/last_name"
-        android:hint="@string/nickname"/>
-    <EditText
-        android:id="@+id/birthday"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        app:layout_constraintStart_toStartOf="@id/username"
-        app:layout_constraintTop_toBottomOf="@id/username"
-        android:hint="@string/born_date"/>
-    <EditText
-        android:id="@+id/primary_activity"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@id/birthday"
-        app:layout_constraintStart_toStartOf="@id/birthday"
-        android:hint="@string/primary_activity"/>
-    <EditText
-        android:id="@+id/phone_number"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:inputType="phone"
-        app:layout_constraintTop_toBottomOf="@id/primary_activity"
-        app:layout_constraintStart_toStartOf="@id/primary_activity"
-        android:hint="@string/phone_number"/>
+        <EditText
+            android:id="@+id/first_name"
+            android:layout_width="150sp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toEndOf="@id/photo_uploader"
+            app:layout_constraintTop_toBottomOf="@id/registration_title"
+            android:hint="@string/first_name"
+            android:layout_marginStart="20dp"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/action_register"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/phone_number"
-        android:layout_marginTop="50dp"/>
 
+        <EditText
+            android:id="@+id/last_name"
+            android:layout_width="150sp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            app:layout_constraintStart_toStartOf="@id/first_name"
+            app:layout_constraintTop_toBottomOf="@id/first_name"
+            android:hint="@string/last_name"/>
+        <EditText
+            android:id="@+id/username"
+            android:layout_width="150sp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            app:layout_constraintStart_toStartOf="@id/last_name"
+            app:layout_constraintTop_toBottomOf="@id/last_name"
+            android:hint="@string/nickname"/>
+        <EditText
+            android:id="@+id/birthday"
+            android:layout_width="150sp"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            app:layout_constraintStart_toStartOf="@id/username"
+            app:layout_constraintTop_toBottomOf="@id/username"
+            android:hint="@string/born_date"/>
+        <EditText
+            android:id="@+id/primary_activity"
+            android:layout_width="150sp"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            app:layout_constraintTop_toBottomOf="@id/birthday"
+            app:layout_constraintStart_toStartOf="@id/birthday"
+            android:hint="@string/primary_activity"/>
+        <EditText
+            android:id="@+id/phone_number"
+            android:layout_width="150sp"
+            android:layout_height="wrap_content"
+            android:inputType="phone"
+            app:layout_constraintTop_toBottomOf="@id/primary_activity"
+            app:layout_constraintStart_toStartOf="@id/primary_activity"
+            android:hint="@string/phone_number"/>
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="150sp"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            app:layout_constraintTop_toBottomOf="@id/phone_number"
+            app:layout_constraintStart_toStartOf="@id/primary_activity"
+            android:hint="@string/prompt_password"/>
+
+        <EditText
+            android:id="@+id/password_repeat"
+            android:layout_width="150sp"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            app:layout_constraintTop_toBottomOf="@id/password"
+            app:layout_constraintStart_toStartOf="@id/primary_activity"
+            android:hint="@string/password_repeat"/>
+
+        <Button
+            android:id="@+id/register_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_register"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/password_repeat"
+            android:layout_marginTop="50dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
