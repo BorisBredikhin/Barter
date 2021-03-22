@@ -27,3 +27,4 @@ app = FastAPI(
 )
 
 app.include_router(routers.router, prefix="/api")
+app.mount('/', application)
