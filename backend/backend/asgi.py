@@ -19,6 +19,7 @@ application = get_asgi_application()
 ###############################################################################
 
 from barter import routers
+from token_auth.routers import app as auth_app
 
 app = FastAPI(
     title="Barter",

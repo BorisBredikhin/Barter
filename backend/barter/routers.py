@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
 from barter import models, schemas
+from token_auth.routers import app
 
 router = APIRouter()
 
@@ -27,3 +28,5 @@ def register(data: schemas.RegisterSchema):
         'message': 'user created succesfully',
         'pk': user.pk
     }
+
+router.include_router(app, prefix="/auth")
