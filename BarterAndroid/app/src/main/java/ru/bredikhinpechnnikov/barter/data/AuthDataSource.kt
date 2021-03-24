@@ -2,14 +2,12 @@ package ru.bredikhinpechnnikov.barter.data
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import ru.bredikhinpechnnikov.barter.Config
 import ru.bredikhinpechnnikov.barter.JSON
 import ru.bredikhinpechnnikov.barter.data.model.LoggedInUser
-import java.io.IOException
-import java.lang.Exception
+import java.nio.charset.Charset
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
@@ -17,13 +15,34 @@ import java.lang.Exception
 class AuthDataSource {
 
     fun login(username: String, password: String): Result<LoggedInUser> {
-        try {
-            // TODO: handle loggedInUser authentication
-            val fakeUser = LoggedInUser(java.util.UUID.randomUUID().toString(), "Jane Doe")
-            return Result.Success(fakeUser)
-        } catch (e: Throwable) {
-            return Result.Error(IOException("Error logging in", e))
-        }
+            val map = HashMap<String, String>()
+
+            map["username"] = username
+            map["password"] = password
+
+            val obj = JSONObject(map as Map<String, String>)
+            val body = obj.toString().toRequestBody(JSON)
+
+        var resp: String? = null
+        val thr = Thread(kotlinx.coroutines.Runnable {
+            OkHttpClient()
+                .newCall(
+                    Request
+                        .Builder()
+                        .url(Config.BACKEND_ADDRESS + "/api/auth/login/")
+                        .header("X-Token", "unauthorized")
+                        .post(body)
+                        .build()
+                )
+                .execute()
+                .use {
+                    resp = JSONObject(it.body!!.source().readString(Charset.forName("utf8"))).getString("token")
+                }
+        })
+        thr.start()
+        thr.join()
+        return Result.Success(LoggedInUser(token = resp!!))
+
     }
 
     fun logout() {
@@ -39,9 +58,9 @@ class AuthDataSource {
         phoneNumber: String,
         password: String,
         repeatedPassword: String
-    ): String {
+    ): Result<String> {
         if (password != repeatedPassword)
-            return ""
+            return Result.Error(IllegalArgumentException("passwords must be same"))
 
         val map = HashMap<String, String>()
 
@@ -57,13 +76,13 @@ class AuthDataSource {
         val body = obj.toString().toRequestBody(JSON)
         val request = Request
             .Builder()
-            .url(Config.BACKEND_ADDRESS+"/api/register")
+            .url(Config.BACKEND_ADDRESS + "/api/register")
             .header("X-Token", "unauthorized")
             .post(body)
             .build()
 
         val thr = Thread(kotlinx.coroutines.Runnable {
-            var resp = OkHttpClient()
+            OkHttpClient()
                 .newCall(request)
                 .execute()
                 .body
@@ -75,6 +94,6 @@ class AuthDataSource {
 
         thr.join()
 
-        return ""
+        return Result.Success("Ok")
     }
 }
