@@ -1,11 +1,13 @@
 package ru.bredikhinpechnnikov.barter.ui.login
 
+import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
 import ru.bredikhinpechnnikov.barter.data.LoginRepository
 import ru.bredikhinpechnnikov.barter.data.Result
+import ru.bredikhinpechnnikov.barter.userToken
 
 import ru.bredikhinpechnnikov.barter.R
 
@@ -17,18 +19,7 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
 
-    fun login(username: String, password: String) {
-        // can be launched in a separate asynchronous job
-        val result = loginRepository.login(username, password)
-
-        if (result is Result.Success) {
-            _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.displayName ?: ""))
-
-            // todo: save result.data.token to preferences
-        } else {
-            _loginResult.value = LoginResult(error = R.string.login_failed)
-        }
-    }
+    fun login(username: String, password: String)  = loginRepository.login(username, password)
 
     fun register(
         firstName: String,

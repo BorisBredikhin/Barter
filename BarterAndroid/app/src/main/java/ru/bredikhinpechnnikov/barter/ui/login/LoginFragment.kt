@@ -1,5 +1,7 @@
 package ru.bredikhinpechnnikov.barter.ui.login
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.annotation.StringRes
@@ -16,7 +18,10 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import ru.bredikhinpechnnikov.barter.R
+import ru.bredikhinpechnnikov.barter.data.Result
+import ru.bredikhinpechnnikov.barter.data.model.LoggedInUser
 import ru.bredikhinpechnnikov.barter.ui.register.RegisterFragment
+import ru.bredikhinpechnnikov.barter.userToken
 
 //import ru.bredikhinpechnnikov.barter.R
 
@@ -99,10 +104,14 @@ class LoginFragment : Fragment() {
 
         loginButton.setOnClickListener {
             loadingProgressBar.visibility = View.VISIBLE
-            loginViewModel.login(
+            val result = loginViewModel.login(
                     usernameEditText.text.toString(),
                     passwordEditText.text.toString()
             )
+
+            if (result is Result.Success){
+                activity!!.getPreferences(Context.MODE_PRIVATE).userToken = result.data.token
+            }
         }
 
         registerButton.setOnClickListener {
