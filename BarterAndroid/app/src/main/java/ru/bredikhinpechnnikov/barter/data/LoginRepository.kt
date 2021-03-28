@@ -47,7 +47,7 @@ class LoginRepository(val dataSource: AuthDataSource) {
         phoneNumber: String,
         password: String,
         repeatedPassword: String
-    ): String{
+    ): Result<String> {
         return dataSource.register(firstName, lastName, username, birthday, primaryActivity, phoneNumber, password, repeatedPassword)
     }
 
