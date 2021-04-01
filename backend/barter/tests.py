@@ -7,6 +7,7 @@ from django.test import TransactionTestCase
 from fastapi.testclient import TestClient
 
 from backend.asgi import app
+from barter.models import Profile
 
 reverse = app.router.url_path_for
 
@@ -17,10 +18,12 @@ class RegisterTest(TransactionTestCase):
         self.c = TestClient(app)
 
     def setUp(self) -> None:
-        User\
-            .objects\
-            .create_user('john', 'lennon@thebeatles.com', 'johnpassword')\
-            .save()
+        Profile(
+            username="john",
+            password="e9c1240161604e16a32ded612ba0c91b9b751fe0",
+            first_name="john",
+            last_name="pwdnj"
+        ).save()
 
 
     def test_register_without_photo(self):
@@ -33,7 +36,7 @@ class RegisterTest(TransactionTestCase):
             'phone_number': '+0123456789',
             'password': 'P@ssw0rd'}))
 
-        self.assertEqual(response.json()['message'], 'user created succesfully')
+        self.assertEqual(response.json()['message'], 'profile created succesfully')
 
     def test_login_get_token(self):
         response = self.c.post('api/auth/login/', headers={"X-Token": "ikikjm"}, data=json.dumps({

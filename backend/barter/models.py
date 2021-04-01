@@ -1,13 +1,13 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from barter import validators
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    username = models.CharField(max_length=100)
+    password = models.CharField(max_length=256)
+    first_name = models.CharField(max_length=256)
+    last_name = models.CharField(max_length=256)
 
     photo = models.ImageField(null=True)
     birthday = models.DateField(null=True)
@@ -16,20 +16,7 @@ class Profile(models.Model):
     points = models.IntegerField(validators=[validators.non_negative_validator], default=0)
 
     def __str__(self):
-        return self.user.first_name + ' ' + self.user.last_name
-
-
-# noinspection PyUnusedLocal
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-
-
-# noinspection PyUnusedLocal
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
+        return self.first_name + ' ' + self.last_name
 
 class Category(models.Model):
     title = models.CharField(max_length=50)
@@ -68,6 +55,16 @@ class Rating(models.Model):
     )
     rating_as_customer = models.FloatField(default=5.0)
     rating_as_executor = models.FloatField(default=5.0)
+
+    @classmethod
+    def get(self, profile: Profile):
+        try:
+            return self.objects.get(user=profile)
+        except self.DoesNotExist:
+            rating = self.objects.create()
+            rating.user = profile
+            rating.save()
+            return rating
 
 task_statuses = [
     ("Новый", "Новый"),

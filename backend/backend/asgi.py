@@ -18,14 +18,18 @@ application = get_asgi_application()
 
 ###############################################################################
 
+from django.contrib.auth.middleware import AuthenticationMiddleware
 from barter import routers
-from token_auth.routers import app as auth_app
 
 app = FastAPI(
     title="Barter",
     description="Backend application for Barter project",
     version="0.0.0"
 )
+
+from token_auth.middleware import TokenAuth
+
+# app.middleware("http")(TokenAuth)
 
 app.include_router(routers.router, prefix="/api")
 app.mount('/', application)

@@ -1,0 +1,9 @@
+GET http://127.0.0.1:8000/api/profile/
+Content-Type: application/json
+Authorization: token fc2a46d90dd5b789ad67abb193f35acd9a6381d3ed7871b295301a0930d9ac99a2ba9a2ccbc3d69b5f7952b254803e1b31b1b5fa23101685820691aa77be44d1
+
+> {%
+client.test("Request executed successfully", function() {
+  client.assert(response.status === 200, "Response status is not 200");
+});
+%}
