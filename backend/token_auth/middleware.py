@@ -1,5 +1,9 @@
+from asgiref.sync import sync_to_async
 from django.contrib.auth import authenticate
 from django.http import HttpResponseBadRequest
+from fastapi import Request
+
+from token_auth.models import Token
 
 
 class TokenMiddleware:
@@ -18,6 +22,13 @@ class TokenMiddleware:
 
         user = authenticate(token=auth_header[2])
         if user:
-            request.user = user
+            request.profile = user
 
         return self.get_response(request)
+
+
+async def TokenAuth(request: Request):
+    name, token = request.headers["Authorization"].split()
+    def get_prof(token):
+        return Token.objects.get(key=token).profile
+    return await sync_to_async(get_prof)(token)

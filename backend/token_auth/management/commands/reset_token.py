@@ -18,4 +18,4 @@ class Command(BaseCommand):
             Token.objects.filter(user=user).delete()
             token = Token.objects.create(user=user)
             print(
-                f'Resetting token for user {token.user}: {token=}')
+                f'Resetting token for user {token.profile}: {token=}')

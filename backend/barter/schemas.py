@@ -4,16 +4,14 @@ from pydantic_django import ModelSchema
 from . import models
 
 
-class UserSchema(ModelSchema):
-    class Config:
-        model = models.User
-        exclude = ['password']
-
-
-class ProfileSchema(ModelSchema):
-    class Config:
-        model = models.Profile
-        exclude = ['photo']
+class ProfileSchema(BaseModel):
+    first_name: str
+    last_name: str
+    username: str
+    primary_activity: str
+    points: int
+    rating_as_customer: int
+    rating_as_executor: int
 
 
 class CategorySchema(ModelSchema):

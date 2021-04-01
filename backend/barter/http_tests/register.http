@@ -1,11 +1,11 @@
-POST https://127.0.0.1:8000/api/register/
+POST http://127.0.0.1:8000/api/register/
 Content-Type: application/json
 
 {
             "first_name": "Demo",
             "last_name": "User",
             "username": "demouser",
-            "birth_day": "17.02.1992",
+            "birth_day": "1992-02-17",
             "primary_activity": "programming",
             "phone_number": "+0123456789",
             "password": "P@ssw0rd"

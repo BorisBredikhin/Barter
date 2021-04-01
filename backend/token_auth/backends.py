@@ -5,7 +5,7 @@ from .models import Token
 class TokenAuthBackend(BaseBackend):
     def authenticate(self, request, token=None):
         try:
-            return Token.objects.get(key=token).user
+            return Token.objects.get(key=token).profile
         except Token.DoesNotExist:
             return None
 
