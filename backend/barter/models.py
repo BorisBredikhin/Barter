@@ -2,21 +2,26 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core.exceptions import ValidationError
 
 from barter import validators
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
     photo = models.ImageField(null=True)
     birthday = models.DateField(null=True)
     primary_activity = models.CharField(max_length=150, null=True)
     phone_number = models.IntegerField(null=True)
     points = models.IntegerField(validators=[validators.non_negative_validator], default=0)
+    frozen_points = models.IntegerField()
 
     def __str__(self):
         return self.user.first_name + ' ' + self.user.last_name
+
+    def possible_frozen(self):
+        if self.points < self.frozen_points:
+            raise ValidationError('not enough points');
 
 
 # noinspection PyUnusedLocal
