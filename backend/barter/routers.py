@@ -9,9 +9,11 @@ from token_auth.routers import app
 
 router = APIRouter()
 
+
 @router.get('/hello')
 async def hello():
     return {'msg': 'hello from django fastapi'}
+
 
 @router.post(
     '/register/',
@@ -20,12 +22,10 @@ async def hello():
 )
 def register(data: schemas.RegisterSchema):
     profile = models.Profile()
-
     profile.username = data.username
     profile.password = hashlib.sha1(data.password.encode("utf-8")).hexdigest()
     profile.first_name = data.first_name
     profile.last_name = data.last_name
-
     profile.birthday = data.birth_day
     profile.primary_activity = data.primary_activity
     profile.phone_number = data.phone_number
@@ -35,6 +35,7 @@ def register(data: schemas.RegisterSchema):
         'message': 'profile created succesfully',
         'pk': profile.pk
     }
+
 
 @router.get("/profile/", response_model=schemas.ProfileSchema)
 def self_profile_view(request: Request, user: Profile = Depends(TokenAuth)):
@@ -48,5 +49,6 @@ def self_profile_view(request: Request, user: Profile = Depends(TokenAuth)):
         "rating_as_executor": rating.rating_as_executor,
         "rating_as_customer": rating.rating_as_customer,
     }
+
 
 router.include_router(app, prefix="/auth")

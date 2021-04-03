@@ -12,7 +12,6 @@ class Profile(models.Model):
     password = models.CharField(max_length=256)
     first_name = models.CharField(max_length=256)
     last_name = models.CharField(max_length=256)
-
     photo = models.ImageField(null=True)
     birthday = models.DateField(null=True)
     primary_activity = models.CharField(max_length=150, null=True)
@@ -22,6 +21,20 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name
+
+    def froze_points(self, amount):
+        if self.points >= amount:
+            self.points -= amount
+            self.frozen_points += amount
+
+    def unfroze_points(self, amount):
+        self.points += amount
+        self.frozen_points -= amount
+
+    def transaction_points(self, other, amount):
+        self.frozen_points -= amount
+        other.points += amount
+
 
 class Category(models.Model):
     title = models.CharField(max_length=50)
@@ -34,7 +47,7 @@ class Address(models.Model):
     country = models.CharField(max_length=50)
     city = models.CharField(max_length=50)
     street = models.CharField(max_length=50)
-    house = models.CharField(max_length=6) # могут быть номера домов вида 20а, 21/8
+    house = models.CharField(max_length=6)  # могут быть номера домов вида 20а, 21/8
     room = models.IntegerField()
 
     latitude = models.FloatField(null=True, blank=True)
@@ -71,12 +84,14 @@ class Rating(models.Model):
             rating.save()
             return rating
 
+
 task_statuses = [
     ("Новый", "Новый"),
     ("Ожидает подтверждение", "Ожидает подтверждение"),
     ("Подтверждён", "Подтверждён"),
     ("Исполнен", "Исполнен"),
 ]
+
 
 class Task(models.Model):
     customer = models.ForeignKey(Profile, on_delete=models.PROTECT, related_name="customer")
@@ -99,6 +114,7 @@ class TaskAddress(Address):
         on_delete=models.CASCADE,
         primary_key=True,
     )
+
 
 class Review(models.Model):
     from_user = models.ForeignKey(Profile, on_delete=models.RESTRICT, related_name="from_user")
