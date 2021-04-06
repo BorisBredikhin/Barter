@@ -1,6 +1,7 @@
 package ru.bredikhinpechnnikov.barter.ui.login
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +18,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import ru.bredikhinpechnnikov.barter.MainActivity
 import ru.bredikhinpechnnikov.barter.R
 import ru.bredikhinpechnnikov.barter.data.Result
 import ru.bredikhinpechnnikov.barter.data.model.LoggedInUser
@@ -48,7 +50,7 @@ class LoginFragment : Fragment() {
         val registerButton = view.findViewById<Button>(R.id.register_btn)
         val loadingProgressBar = view.findViewById<ProgressBar>(R.id.loading)
 
-        loginViewModel.loginFormState.observe(this,
+        loginViewModel.loginFormState.observe(viewLifecycleOwner,
                 Observer { loginFormState ->
                     if (loginFormState == null) {
                         return@Observer
@@ -62,7 +64,7 @@ class LoginFragment : Fragment() {
                     }
                 })
 
-        loginViewModel.loginResult.observe(this,
+        loginViewModel.loginResult.observe(viewLifecycleOwner,
                 Observer { loginResult ->
                     loginResult ?: return@Observer
                     loadingProgressBar.visibility = View.GONE
@@ -110,12 +112,15 @@ class LoginFragment : Fragment() {
             )
 
             if (result is Result.Success){
-                activity!!.getPreferences(Context.MODE_PRIVATE).userToken = result.data.token
+                requireActivity().getPreferences(Context.MODE_PRIVATE).userToken = result.data.token
+                val i = Intent(activity, MainActivity::class.java);
+                i.putExtra("msg", "logged in")
+                requireActivity().startActivity(i)
             }
         }
 
         registerButton.setOnClickListener {
-            fragmentManager!!
+            parentFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment, RegisterFragment())
                 .commit()
