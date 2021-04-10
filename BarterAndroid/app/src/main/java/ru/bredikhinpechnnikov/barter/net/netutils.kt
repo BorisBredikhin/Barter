@@ -1,4 +1,4 @@
-package ru.bredikhinpechnnikov.barter
+package ru.bredikhinpechnnikov.barter.net
 
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaType
