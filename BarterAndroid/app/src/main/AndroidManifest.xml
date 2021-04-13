@@ -14,10 +14,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BarterAndroid">
-        <activity
-            android:name=".ui.AppActivity"
-            android:label="@string/title_activity_app"
-            android:theme="@style/Theme.BarterAndroid.NoActionBar"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,6 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.AppActivity"></activity>
     </application>
 
 </manifest>
