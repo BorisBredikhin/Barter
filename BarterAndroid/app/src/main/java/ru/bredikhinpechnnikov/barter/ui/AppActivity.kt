@@ -21,7 +21,7 @@ class AppActivity : AppCompatActivity() {
         Log.d("barter", intent.getStringExtra("token") ?: "")
    }
 
-    @SuppressLint("SetTextI18n")
+//    @SuppressLint("SetTextI18n")
     override fun onStart() {
         super.onStart()
 
@@ -29,7 +29,9 @@ class AppActivity : AppCompatActivity() {
 
         val token = intent.getStringExtra("token")
         userdata = getUserData(token!!)
-        findViewById<TextView>(R.id.username).text = "${userdata.firstName} ${userdata.lastName}"
 
+        findViewById<TextView>(R.id.username).text = "${userdata.firstName} ${userdata.lastName}"
+        findViewById<TextView>(R.id.balance).text = "${userdata.points} б."
+    findViewById<TextView>(R.id.rating).text="${userdata.ratingAsCustomer}/${userdata.ratingAsExecutor}"
     }
 }

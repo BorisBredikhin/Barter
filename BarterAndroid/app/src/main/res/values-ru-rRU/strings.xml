@@ -19,4 +19,10 @@
     <string name="phone_number">Телефон</string>
     <string name="action_register">Зарегистрироваться</string>
     <string name="password_repeat">Повторите пароль</string>
+    <string name="registration">Регистрация</string>
+    <string name="profile_photio">Фото профиля</string>
+    <string name="balance">"Баланс: "</string>
+    <string name="rating_as_executor">Рейтинг исполнителя</string>
+    <string name="rating_as_customer">Рейтинг заказчика</string>
+    <string name="rating_as_customer_executor">"Рейтинг З/И: "</string>
 </resources>

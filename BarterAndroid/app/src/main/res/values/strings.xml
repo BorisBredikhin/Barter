@@ -35,4 +35,8 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="balance">balance</string>
+    <string name="rating_as_executor">Rating as executor</string>
+    <string name="rating_as_customer">Rating as customer</string>
+    <string name="rating_as_customer_executor">Rating as customer/executor</string>
 </resources>
