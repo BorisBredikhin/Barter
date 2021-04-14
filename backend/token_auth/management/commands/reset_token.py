@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand, CommandError
 
+from barter.models import Profile
 from token_auth.models import Token
 
 class Command(BaseCommand):
@@ -14,8 +15,8 @@ class Command(BaseCommand):
         if input("".join(message)) != 'yes':
             raise CommandError("Reset tokens cancelled.")
 
-        for user in get_user_model().objects.all():
-            Token.objects.filter(user=user).delete()
-            token = Token.objects.create(user=user)
+        for user in Profile.objects.all():
+            Token.objects.filter(profile=user).delete()
+            token = Token.objects.create(profile=user)
             print(
                 f'Resetting token for user {token.profile}: {token=}')

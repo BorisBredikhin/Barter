@@ -1,28 +1,39 @@
 package ru.bredikhinpechnnikov.barter
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.FrameLayout
-import androidx.appcompat.app.AlertDialog
+import ru.bredikhinpechnnikov.barter.ui.AppActivity
 import ru.bredikhinpechnnikov.barter.ui.login.LoginFragment
 
 class MainActivity : AppCompatActivity() {
+    private var userToken: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        if (getPreferences(Context.MODE_PRIVATE).userToken == null)
+        userToken = getPreferences(Context.MODE_PRIVATE).userToken
+        if (userToken == null)
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment, LoginFragment())
                 .commit()
         else {
-            // todo: open user page
-            val builder = AlertDialog.Builder(this)
-            builder.setMessage(getPreferences(Context.MODE_PRIVATE).userToken)
-
-            builder.create().show()
+//          getPreferences(Context.MODE_PRIVATE).userToken
+            userAlreadyHasToken(userToken!!)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        userAlreadyHasToken(userToken!!)
+    }
+
+    private fun userAlreadyHasToken(userToken: String) {
+        val intent = Intent(applicationContext, AppActivity::class.java)
+        intent.putExtra("token", userToken)
+        startActivity(intent)
     }
 }

@@ -1,18 +1,17 @@
-package ru.bredikhinpechnnikov.barter.data
+package ru.bredikhinpechnnikov.barter.net
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
-import ru.bredikhinpechnnikov.barter.Config
-import ru.bredikhinpechnnikov.barter.JSON
+import ru.bredikhinpechnnikov.barter.data.Result
 import ru.bredikhinpechnnikov.barter.data.model.LoggedInUser
 import java.nio.charset.Charset
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
-class AuthDataSource {
+class AuthProvider {
 
     fun login(username: String, password: String): Result<LoggedInUser> {
             val map = HashMap<String, String>()
@@ -42,7 +41,6 @@ class AuthDataSource {
         thr.start()
         thr.join()
         return Result.Success(LoggedInUser(token = resp!!))
-
     }
 
     fun logout() {

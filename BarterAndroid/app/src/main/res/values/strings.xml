@@ -24,4 +24,19 @@
     <string name="phone_number">Телефон</string>
     <string name="action_register">Зарегистрироваться</string>
     <string name="password_repeat">Повторите пароль</string>
+    <string name="title_activity_app">AppActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="balance">balance</string>
+    <string name="rating_as_executor">Rating as executor</string>
+    <string name="rating_as_customer">Rating as customer</string>
+    <string name="rating_as_customer_executor">Rating as customer/executor</string>
 </resources>

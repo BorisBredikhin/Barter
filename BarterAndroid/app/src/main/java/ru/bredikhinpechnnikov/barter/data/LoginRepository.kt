@@ -1,13 +1,14 @@
 package ru.bredikhinpechnnikov.barter.data
 
 import ru.bredikhinpechnnikov.barter.data.model.LoggedInUser
+import ru.bredikhinpechnnikov.barter.net.AuthProvider
 
 /**
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository(val dataSource: AuthDataSource) {
+class LoginRepository(val provider: AuthProvider) {
 
     // in-memory cache of the loggedInUser object
     var user: LoggedInUser? = null
@@ -24,12 +25,12 @@ class LoginRepository(val dataSource: AuthDataSource) {
 
     fun logout() {
         user = null
-        dataSource.logout()
+        provider.logout()
     }
 
     fun login(username: String, password: String): Result<LoggedInUser> {
         // handle login
-        val result = dataSource.login(username, password)
+        val result = provider.login(username, password)
 
         if (result is Result.Success) {
             setLoggedInUser(result.data)
@@ -48,7 +49,7 @@ class LoginRepository(val dataSource: AuthDataSource) {
         password: String,
         repeatedPassword: String
     ): Result<String> {
-        return dataSource.register(firstName, lastName, username, birthday, primaryActivity, phoneNumber, password, repeatedPassword)
+        return provider.register(firstName, lastName, username, birthday, primaryActivity, phoneNumber, password, repeatedPassword)
     }
 
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {

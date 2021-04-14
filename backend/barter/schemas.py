@@ -10,8 +10,8 @@ class ProfileSchema(BaseModel):
     username: str
     primary_activity: str
     points: int
-    rating_as_customer: int
-    rating_as_executor: int
+    rating_as_customer: float
+    rating_as_executor: float
 
 
 class CategorySchema(ModelSchema):

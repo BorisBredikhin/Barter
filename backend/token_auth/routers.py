@@ -13,7 +13,7 @@ def login(data: LoginSchema):
     user = Profile.objects.get(password = hashlib.sha1(data.password.encode("utf-8")).hexdigest())
 
     if user is not None:
-        token = Token.objects.get(user_id=user.pk)
+        token = Token.objects.get(profile=user.pk)
         # token.save()
         return {'token': token.key, 'message': 'ok'}
     else:
