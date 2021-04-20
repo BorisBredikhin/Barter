@@ -50,4 +50,8 @@ def self_profile_view(request: Request, user: Profile = Depends(TokenAuth)):
     }
 
 
+@router.get("/tasks/", response_model=schemas.TaskLstSchema)
+def get_tasks(request: Request, user: Profile = Depends(TokenAuth)):
+    return {}
+
 router.include_router(app, prefix="/auth")

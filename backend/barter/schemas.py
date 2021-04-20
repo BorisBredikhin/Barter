@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from pydantic_django import ModelSchema
+from typing import List
 
 from . import models
 
@@ -33,6 +34,9 @@ class TaskSchema(ModelSchema):
     class Config:
         model = models.Task
 
+
+class TaskLstSchema(BaseModel):
+    tasks: List[TaskSchema]
 
 class TagSchema(ModelSchema):
     class Config:
