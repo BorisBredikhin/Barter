@@ -1,10 +1,8 @@
-from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-from django.core.exceptions import ValidationError
+from django.db import models
 
 from barter import validators
+from barter.utils import Dictionable
 
 
 class Profile(models.Model):
@@ -93,15 +91,27 @@ task_statuses = [
 ]
 
 
-class Task(models.Model):
+class Task(models.Model, Dictionable):
     customer = models.ForeignKey(Profile, on_delete=models.PROTECT, related_name="customer")
-    executor = models.ForeignKey(Profile, on_delete=models.PROTECT, related_name="executor")
+    executor = models.ForeignKey(Profile, on_delete=models.PROTECT, related_name="executor", null=True, blank=True)
     title = models.CharField(max_length=50)
     description = models.TextField()
     price = models.IntegerField(validators=[validators.non_negative_validator])
     status = models.CharField(max_length=21, choices=task_statuses)
     category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
 
+
+    def to_dict(self) -> dict:
+        return {
+            "customer": self.customer.pk,
+            "executor": self.executor.pk \
+                if not self.executor is None \
+                else None,
+            "title": self.title,
+            "description": self.description,
+            "price": self.price,
+            "status": self.status,
+        }
 
 class Tag(models.Model):
     task = models.ManyToManyField(Task)

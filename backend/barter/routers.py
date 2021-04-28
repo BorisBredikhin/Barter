@@ -1,3 +1,4 @@
+from django.db.models import Q
 from fastapi import APIRouter, Request, Depends
 import hashlib
 
@@ -52,6 +53,38 @@ def self_profile_view(request: Request, user: Profile = Depends(TokenAuth)):
 
 @router.get("/tasks/", response_model=schemas.TaskLstSchema)
 def get_tasks(request: Request, user: Profile = Depends(TokenAuth)):
-    return {}
+    return {
+        "tasks": list(map(
+            lambda x: x.to_dict,
+            models.Task.objects.filter(
+                ~Q(customer_id=user.pk),
+                executor=None,
+                status=models.task_statuses[0] # только новые заказы
+            )
+        ))
+    }
+
+@router.post("/tasks/new")
+async def new_task(request: Request, data: schemas.NewTaskSchema, user: Profile = Depends(TokenAuth)):
+    try:
+        obj = models.Task.objects.create(
+            customer=user,
+            title=data.title,
+            description=data.description,
+            price=data.price,
+            category=models.Category.objects.get(title=data.category) if not data.category is None else None
+        )
+        obj.save()
+
+        # todo: notify users about new task
+
+        return {
+            "status": "ok"
+        }
+    except:
+        return {
+            "status": "error"
+        }
+
 
 router.include_router(app, prefix="/auth")
