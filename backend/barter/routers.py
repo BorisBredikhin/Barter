@@ -72,14 +72,16 @@ async def new_task(request: Request, data: schemas.NewTaskSchema, user: Profile 
             title=data.title,
             description=data.description,
             price=data.price,
-            category=models.Category.objects.get(title=data.category) if not data.category is None else None
+            category=models.Category.objects.get(title=data.category) if not data.category is None else None,
+            address_str=data.address,
         )
         obj.save()
 
         # todo: notify users about new task
 
         return {
-            "status": "ok"
+            "status": "ok",
+            "task": obj.to_dict()
         }
     except:
         return {

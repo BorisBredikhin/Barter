@@ -26,4 +26,6 @@
     <string name="rating_as_customer">Рейтинг заказчика</string>
     <string name="rating_as_customer_executor">"Рейтинг З/И: "</string>
     <string name="new_task">Разместить заказ</string>
+    <string name="title">Заголовок</string>
+    <string name="description">Описание</string>
 </resources>

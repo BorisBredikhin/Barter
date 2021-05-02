@@ -30,7 +30,7 @@ class RatingSchema(ModelSchema):
         model = models.Rating
 
 
-class TaskSchema(ModelSchema):
+class TaskSchema(BaseModel):
     customer: int
     executor: Optional[int]
     title: str
@@ -71,6 +71,7 @@ class NewTaskSchema(BaseModel):
     description: str
     price: int
     category: Optional[str]
+    address: str
 
 class TagSchema(ModelSchema):
     class Config:

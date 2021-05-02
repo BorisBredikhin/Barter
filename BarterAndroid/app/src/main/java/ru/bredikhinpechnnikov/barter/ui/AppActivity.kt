@@ -1,8 +1,11 @@
 package ru.bredikhinpechnnikov.barter.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,7 +45,13 @@ class AppActivity : AppCompatActivity() {
         taskRecyclerView!!.layoutManager = LinearLayoutManager(this).also {
             it.orientation = LinearLayoutManager.VERTICAL
         }
-        taskRecyclerView!!.adapter = TaskListAdapter(getTasks())
+//        taskRecyclerView!!.adapter = TaskListAdapter(getTasks())
+
+        findViewById<Button>(R.id.new_task).setOnClickListener({
+            val intent = Intent(applicationContext,  NewTaskActivity::class.java)
+            intent.putExtra("token", token)
+            startActivity(intent)
+        })
     }
 
     private fun getTasks(): List<Task> {

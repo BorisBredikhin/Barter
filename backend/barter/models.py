@@ -91,14 +91,16 @@ task_statuses = [
 ]
 
 
-class Task(models.Model, Dictionable):
+class Task(models.Model):
     customer = models.ForeignKey(Profile, on_delete=models.PROTECT, related_name="customer")
     executor = models.ForeignKey(Profile, on_delete=models.PROTECT, related_name="executor", null=True, blank=True)
     title = models.CharField(max_length=50)
     description = models.TextField()
     price = models.IntegerField(validators=[validators.non_negative_validator])
     status = models.CharField(max_length=21, choices=task_statuses)
-    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True)
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL, null=True, blank=True)
+    address_obj = models.ForeignKey('TaskAddress', on_delete=models.PROTECT, null=True, blank=True, related_name="task_address_obj")
+    address_str = models.TextField()
 
 
     def to_dict(self) -> dict:
