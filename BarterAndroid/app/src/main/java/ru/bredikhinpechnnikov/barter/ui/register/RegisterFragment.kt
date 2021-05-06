@@ -1,6 +1,7 @@
 package ru.bredikhinpechnnikov.barter.ui.register
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
@@ -79,7 +80,7 @@ class RegisterFragment : Fragment() {
             val permissionStatus = ContextCompat.checkSelfPermission(view.context, Manifest.permission.READ_EXTERNAL_STORAGE)
 
             if (permissionStatus == PackageManager.PERMISSION_DENIED)
-                ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
 
 
             val intent = Intent()
@@ -111,19 +112,20 @@ class RegisterFragment : Fragment() {
 
         val photoFile = createImageFile()
 
-        val inputStream = activity!!.contentResolver.openInputStream(data.data!!)
+        val inputStream = requireActivity().contentResolver.openInputStream(data.data!!)
         val decodeStream = BitmapFactory.decodeStream(inputStream)
-        view!!.findViewById<ImageView>(R.id.photo_uploader).setImageBitmap(decodeStream)
+        requireView().findViewById<ImageView>(R.id.photo_uploader).setImageBitmap(decodeStream)
         inputStream!!.close()
     }
 
 
+    @SuppressLint("SimpleDateFormat")
     @Throws(IOException::class)
     private fun createImageFile(): File? {
         // Create an image file name
         val timeStamp: String = SimpleDateFormat("yyyyMMddHHmmss").format(Date())
         val imageFileName = "JPEG_" + timeStamp + "_"
-        val storageDir = activity!!.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val storageDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",  /* suffix */

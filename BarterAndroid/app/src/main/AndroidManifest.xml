@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BarterAndroid">
-        <activity android:name=".ui.NewTaskActivity">
+        <activity android:name=".ui.new_task.NewTaskActivity">
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>

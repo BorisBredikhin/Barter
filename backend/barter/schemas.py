@@ -98,8 +98,9 @@ class RegisterSchema(BaseModel):
     password: str
 
 class NewTaskSchema(BaseModel):
-    customer_id: int
+    # customer_id: int
     title: str
     description: str
-    price: str
+    price: int
+    address: str
     category: Optional[str]

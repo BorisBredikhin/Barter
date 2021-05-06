@@ -2,8 +2,6 @@ package ru.bredikhinpechnnikov.barter.net
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
-import org.json.JSONObject
 import ru.bredikhinpechnnikov.barter.data.model.Profile
 
 fun getUserData(token: String): Profile {

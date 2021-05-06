@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +13,7 @@ import ru.bredikhinpechnnikov.barter.R
 import ru.bredikhinpechnnikov.barter.data.model.Profile
 import ru.bredikhinpechnnikov.barter.data.model.Task
 import ru.bredikhinpechnnikov.barter.net.getUserData
-import ru.bredikhinpechnnikov.barter.ui.adapters.TaskListAdapter
+import ru.bredikhinpechnnikov.barter.ui.new_task.NewTaskActivity
 
 class AppActivity : AppCompatActivity() {
     private var userdata: Profile? = null
@@ -47,11 +46,11 @@ class AppActivity : AppCompatActivity() {
         }
 //        taskRecyclerView!!.adapter = TaskListAdapter(getTasks())
 
-        findViewById<Button>(R.id.new_task).setOnClickListener({
-            val intent = Intent(applicationContext,  NewTaskActivity::class.java)
+        findViewById<Button>(R.id.new_task).setOnClickListener {
+            val intent = Intent(applicationContext, NewTaskActivity::class.java)
             intent.putExtra("token", token)
             startActivity(intent)
-        })
+        }
     }
 
     private fun getTasks(): List<Task> {
