@@ -39,4 +39,9 @@
     <string name="rating_as_executor">Rating as executor</string>
     <string name="rating_as_customer">Rating as customer</string>
     <string name="rating_as_customer_executor">Rating as customer/executor</string>
+    <string name="new_task">Разместить заказ</string>
+    <string name="title">Заголовок</string>
+    <string name="description">Описание</string>
+    <string name="task_price_in_points">Стоимость в баллах</string>
+    <string name="address">Адрес</string>
 </resources>

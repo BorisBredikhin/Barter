@@ -1,3 +1,5 @@
+from asgiref.sync import sync_to_async
+from django.db.models import Q
 from fastapi import APIRouter, Request, Depends
 import hashlib
 
@@ -48,6 +50,50 @@ def self_profile_view(request: Request, user: Profile = Depends(TokenAuth)):
         "rating_as_executor": rating.rating_as_executor,
         "rating_as_customer": rating.rating_as_customer,
     }
+
+
+@router.get("/tasks/", response_model=schemas.TaskLstSchema)
+def get_tasks(request: Request, user: Profile = Depends(TokenAuth)):
+    return {
+        "tasks": list(map(
+            lambda x: x.to_dict,
+            models.Task.objects.filter(
+                ~Q(customer_id=user.pk),
+                executor=None,
+                status=models.task_statuses[0] # только новые заказы
+            )
+        ))
+    }
+
+@router.post("/tasks/new")
+async def new_task(request: Request,
+                   data: schemas.NewTaskSchema,
+                   user: Profile = Depends(TokenAuth)):
+    if True:
+        def helper():
+            obj = models.Task.objects.create(
+                customer=user,
+                title=data.title,
+                description=data.description,
+                price=data.price,
+                category=models.Category.objects.get(title=data.category) if not data.category is None else None,
+                address_str=data.address,
+            )
+            obj.save()
+            return obj
+        obj = await sync_to_async(helper)()
+
+        # todo: notify users about new task
+
+        return {
+            "status": "ok",
+            "task": obj.to_dict()
+        }
+    # except Exception:
+    #     print(Exception)
+    #     return {
+    #         "status": "error"
+    #     }
 
 
 router.include_router(app, prefix="/auth")

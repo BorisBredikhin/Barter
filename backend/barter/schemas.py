@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from pydantic_django import ModelSchema
+from typing import List, Optional
 
 from . import models
 
@@ -29,10 +30,17 @@ class RatingSchema(ModelSchema):
         model = models.Rating
 
 
-class TaskSchema(ModelSchema):
-    class Config:
-        model = models.Task
+class TaskSchema(BaseModel):
+    customer: int
+    executor: Optional[int]
+    title: str
+    description: str
+    price: int
+    status: str
 
+
+class TaskLstSchema(BaseModel):
+    tasks: List[TaskSchema]
 
 class TagSchema(ModelSchema):
     class Config:
@@ -57,3 +65,42 @@ class RegisterSchema(BaseModel):
     primary_activity: str
     phone_number: str
     password: str
+
+class NewTaskSchema(BaseModel):
+    title: str
+    description: str
+    price: int
+    category: Optional[str]
+    address: str
+
+class TagSchema(ModelSchema):
+    class Config:
+        model = models.Tag
+
+
+class TaskAddressSchema(ModelSchema):
+    class Config:
+        model = models.TaskAddress
+
+
+class ReviewSchema(ModelSchema):
+    class Config:
+        model = models.Review
+
+
+class RegisterSchema(BaseModel):
+    first_name: str
+    last_name: str
+    username: str
+    birth_day: str
+    primary_activity: str
+    phone_number: str
+    password: str
+
+class NewTaskSchema(BaseModel):
+    # customer_id: int
+    title: str
+    description: str
+    price: int
+    address: str
+    category: Optional[str]
