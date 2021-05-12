@@ -44,4 +44,5 @@
     <string name="description">Описание</string>
     <string name="task_price_in_points">Стоимость в баллах</string>
     <string name="address">Адрес</string>
+    <string name="choose">Выбрать</string>
 </resources>

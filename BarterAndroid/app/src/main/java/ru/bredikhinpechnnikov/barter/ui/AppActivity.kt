@@ -12,10 +12,13 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.bredikhinpechnnikov.barter.R
 import ru.bredikhinpechnnikov.barter.data.model.Profile
 import ru.bredikhinpechnnikov.barter.data.model.Task
+import ru.bredikhinpechnnikov.barter.net.TaskProvider
 import ru.bredikhinpechnnikov.barter.net.getUserData
+import ru.bredikhinpechnnikov.barter.ui.adapters.TaskListAdapter
 import ru.bredikhinpechnnikov.barter.ui.new_task.NewTaskActivity
 
 class AppActivity : AppCompatActivity() {
+    private var token: String? = null
     private var userdata: Profile? = null
     private var taskRecyclerView: RecyclerView? = null
 
@@ -33,7 +36,7 @@ class AppActivity : AppCompatActivity() {
 
         Log.d("barter", intent.getStringExtra("token") ?: "")
 
-        val token = intent.getStringExtra("token")
+        token = intent.getStringExtra("token")
         userdata = getUserData(token!!)
 
         findViewById<TextView>(R.id.username).text = "${userdata!!.firstName} ${userdata!!.lastName}"
@@ -44,7 +47,7 @@ class AppActivity : AppCompatActivity() {
         taskRecyclerView!!.layoutManager = LinearLayoutManager(this).also {
             it.orientation = LinearLayoutManager.VERTICAL
         }
-//        taskRecyclerView!!.adapter = TaskListAdapter(getTasks())
+        taskRecyclerView!!.adapter = TaskListAdapter(getTasks())
 
         findViewById<Button>(R.id.new_task).setOnClickListener {
             val intent = Intent(applicationContext, NewTaskActivity::class.java)
@@ -53,9 +56,5 @@ class AppActivity : AppCompatActivity() {
         }
     }
 
-    private fun getTasks(): List<Task> {
-        TODO("Not yet implemented")
-    }
-
-
+    private fun getTasks(): List<Task> = TaskProvider.getTasks(token!!)
 }
