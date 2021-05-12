@@ -78,6 +78,7 @@ async def new_task(request: Request,
                 price=data.price,
                 category=models.Category.objects.get(title=data.category) if not data.category is None else None,
                 address_str=data.address,
+                status=models.task_statuses[0],
             )
             obj.save()
             return obj
