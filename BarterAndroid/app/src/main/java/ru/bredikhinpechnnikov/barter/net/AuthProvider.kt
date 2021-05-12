@@ -74,7 +74,7 @@ class AuthProvider {
         val body = obj.toString().toRequestBody(JSON)
         val request = Request
             .Builder()
-            .url(Config.BACKEND_ADDRESS + "/api/register")
+            .url(Config.BACKEND_ADDRESS + "/api/register/")
             .header("X-Token", "unauthorized")
             .post(body)
             .build()

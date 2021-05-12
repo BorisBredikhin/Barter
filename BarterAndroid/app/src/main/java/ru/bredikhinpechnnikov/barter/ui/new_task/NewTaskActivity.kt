@@ -27,10 +27,10 @@ class NewTaskActivity : AppCompatActivity() {
 
         add_btn.setOnClickListener {
             val task = Task(
-                task_title.text.toString(),
-                task_description.text.toString(),
-                task_price.text.toString().toInt(),
-                task_address.text.toString(),
+                title = task_title.text.toString(),
+                description = task_description.text.toString(),
+                price = task_price.text.toString().toInt(),
+                address = task_address.text.toString(),
             )
 
            TaskProvider.addNewTask(task, intent.getStringExtra("token")!!)

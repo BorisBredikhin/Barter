@@ -52,15 +52,19 @@ def self_profile_view(request: Request, user: Profile = Depends(TokenAuth)):
     }
 
 
-@router.get("/tasks/", response_model=schemas.TaskLstSchema)
+@router.get("/tasks",
+            # response_model=schemas.TaskListSchema
+            )
 def get_tasks(request: Request, user: Profile = Depends(TokenAuth)):
     return {
         "tasks": list(map(
-            lambda x: x.to_dict,
-            models.Task.objects.filter(
+            models.Task.to_dict,
+            models.Task.objects\
+            # .all()
+                .filter(
                 ~Q(customer_id=user.pk),
                 executor=None,
-                status=models.task_statuses[0] # только новые заказы
+                # status=models.task_statuses[0] # тол0ько новые заказы, пока не работает.
             )
         ))
     }

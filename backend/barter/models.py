@@ -15,7 +15,7 @@ class Profile(models.Model):
     primary_activity = models.CharField(max_length=150, null=True)
     phone_number = models.IntegerField(null=True)
     points = models.IntegerField(validators=[validators.non_negative_validator], default=0)
-    frozen_points = models.IntegerField()
+    frozen_points = models.IntegerField(default=0)
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name
@@ -104,16 +104,17 @@ class Task(models.Model):
 
 
     def to_dict(self) -> dict:
-        return {
+        r = {
             "customer": self.customer.pk,
-            "executor": self.executor.pk \
-                if not self.executor is None \
-                else None,
             "title": self.title,
             "description": self.description,
             "price": self.price,
             "status": self.status,
+            "address": self.address_str,
+            "id": self.pk
         }
+        r["executor"] = self.executor.pk if not self.executor is None else None
+        return r
 
 class Tag(models.Model):
     task = models.ManyToManyField(Task)

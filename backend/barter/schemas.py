@@ -37,9 +37,11 @@ class TaskSchema(BaseModel):
     description: str
     price: int
     status: str
+    address: str
+    pk: int
 
 
-class TaskLstSchema(BaseModel):
+class TaskListSchema(BaseModel):
     tasks: List[TaskSchema]
 
 class TagSchema(ModelSchema):

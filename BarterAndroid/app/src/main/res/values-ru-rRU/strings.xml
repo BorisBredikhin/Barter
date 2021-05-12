@@ -28,4 +28,5 @@
     <string name="new_task">Разместить заказ</string>
     <string name="title">Заголовок</string>
     <string name="description">Описание</string>
+    <string name="choose">Выбрать</string>
 </resources>
