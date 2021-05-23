@@ -47,7 +47,7 @@ class AppActivity : AppCompatActivity() {
         taskRecyclerView!!.layoutManager = LinearLayoutManager(this).also {
             it.orientation = LinearLayoutManager.VERTICAL
         }
-        taskRecyclerView!!.adapter = TaskListAdapter(getTasks())
+        taskRecyclerView!!.adapter = TaskListAdapter(getTasks(), token!!)
 
         findViewById<Button>(R.id.new_task).setOnClickListener {
             val intent = Intent(applicationContext, NewTaskActivity::class.java)

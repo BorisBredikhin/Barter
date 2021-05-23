@@ -29,7 +29,7 @@ class NewTaskActivity : AppCompatActivity() {
             val task = Task(
                 title = task_title.text.toString(),
                 description = task_description.text.toString(),
-                price = task_price.text.toString().toInt(),
+                price = Integer.parseInt(task_price.text.toString()),
                 address = task_address.text.toString(),
             )
 

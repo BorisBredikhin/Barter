@@ -78,7 +78,34 @@ object TaskProvider {
         return resultTasks
     }
 
-    private inline fun JSONObjectToTask(currentTask: JSONObject) = Task(
+    fun getTask(token: String, id: Int): Task {
+        var resp: String? = null
+
+        val thr = Thread(kotlinx.coroutines.Runnable {
+            OkHttpClient()
+                .newCall(
+                    Request
+                        .Builder()
+                        .url(Config.BACKEND_ADDRESS+"/api/task?pk="+id.toString())
+                        .header("Authorization", "token $token")
+                        .get()
+                        .build()
+                )
+                .execute()
+                .use {
+                    resp = it.body!!.string()
+                }
+        })
+
+        thr.start()
+        thr.join()
+
+        val jsonObj = JSONObject(resp!!)
+
+        return JSONObjectToTask(jsonObj)
+    }
+
+    private fun JSONObjectToTask(currentTask: JSONObject) = Task(
         id = currentTask.getInt("id"),
         customer = currentTask.getInt("customer"),
         executor = try {

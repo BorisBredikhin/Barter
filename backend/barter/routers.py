@@ -15,6 +15,9 @@ router = APIRouter()
 async def hello():
     return {'msg': 'hello from django fastapi'}
 
+@router.get("/task")
+def get_task(pk: int):
+    return models.Task.objects.get(pk=pk).to_dict()
 
 @router.post(
     '/register/',
