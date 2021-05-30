@@ -2,11 +2,13 @@ package ru.bredikhinpechnnikov.barter.net
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.json.JSONException
+import org.json.JSONObject
 import ru.bredikhinpechnnikov.barter.data.model.Profile
 
-fun getUserData(token: String): Profile {
+fun getUserData(token: String): Profile? {
     var response: Profile? = null
-    var resp: String? = null
+    var resp: String?
 
     val thr = Thread(kotlinx.coroutines.Runnable {
         OkHttpClient()
@@ -21,7 +23,11 @@ fun getUserData(token: String): Profile {
             .execute()
             .use {
                 resp = it.body!!.string()
-                response = Profile(resp!!)
+                response = try {
+                    Profile(resp!!)
+                } catch (e: JSONException) {
+                    null
+                }
             }
     })
 
@@ -29,5 +35,8 @@ fun getUserData(token: String): Profile {
     thr.start()
     thr.join()
 
-    return response!!
+    return when (response?.firstName) {
+        null -> null
+        else -> response
+    }
 }

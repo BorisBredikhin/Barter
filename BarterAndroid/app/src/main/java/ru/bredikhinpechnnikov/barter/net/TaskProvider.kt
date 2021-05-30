@@ -8,8 +8,32 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONException
 import org.json.JSONObject
 import ru.bredikhinpechnnikov.barter.data.model.Task
+import java.util.*
 
 object TaskProvider {
+    fun execute_task(taskId: Int, token: String) {
+        var resp: String? = null
+
+        val thr = Thread(kotlinx.coroutines.Runnable {
+            OkHttpClient()
+                .newCall(
+                    Request
+                        .Builder()
+                        .url(Config.BACKEND_ADDRESS+"/api/tasks/execute?pk=$taskId")
+                        .header("Authorization", "token $token")
+                        .get()
+                        .build()
+                )
+                .execute()
+                .use {
+                    resp = it.body!!.string()
+                }
+        })
+
+        thr.start()
+        thr.join()
+    }
+
     fun addNewTask(task: Task, token: String) {
         var resp: String? = null
 
@@ -66,13 +90,18 @@ object TaskProvider {
         thr.start()
         thr.join()
 
-        val jsonObj = JSONObject(resp!!)
-        val tasks = jsonObj.getJSONArray("tasks")
         val resultTasks = ArrayList<Task>()
 
-        for (i in 0..tasks.length()-1){
-            val currentTask = tasks[i] as JSONObject
-            resultTasks.add(JSONObjectToTask(currentTask))
+        try {
+            val jsonObj = JSONObject(resp!!)
+            val tasks = jsonObj.getJSONArray("tasks")
+
+            for (i in 0..tasks.length() - 1) {
+                val currentTask = tasks[i] as JSONObject
+                resultTasks.add(JSONObjectToTask(currentTask))
+            }
+        } finally {
+
         }
 
         return resultTasks

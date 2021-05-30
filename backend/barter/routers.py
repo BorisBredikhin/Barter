@@ -1,4 +1,5 @@
 from asgiref.sync import sync_to_async
+from django.db import IntegrityError, transaction
 from django.db.models import Q
 from fastapi import APIRouter, Request, Depends
 import hashlib
@@ -18,6 +19,17 @@ async def hello():
 @router.get("/task")
 def get_task(pk: int):
     return models.Task.objects.get(pk=pk).to_dict()
+
+@router.get("/task/execute")
+def execute_task(pk: int):
+    task = models.Task.objects.get(pk=pk)
+    try:
+        with transaction.atomic():
+            task.status = models.task_statuses[3]
+            models.Profile.transaction_points(task.customer, task.executor, task.price)
+        return {"status": "ok"}
+    except IntegrityError as e:
+        return {"status": str(e)}
 
 @router.post(
     '/register/',
@@ -41,18 +53,23 @@ def register(data: schemas.RegisterSchema):
     }
 
 
-@router.get("/profile/", response_model=schemas.ProfileSchema)
+@router.get("/profile/",
+            # response_model=schemas.ProfileSchema
+            )
 def self_profile_view(request: Request, user: Profile = Depends(TokenAuth)):
-    rating = Rating.get(user)
-    return {
-        "first_name": user.first_name,
-        "last_name": user.last_name,
-        "username": user.username,
-        "primary_activity": user.primary_activity,
-        "points": user.points,
-        "rating_as_executor": rating.rating_as_executor,
-        "rating_as_customer": rating.rating_as_customer,
-    }
+    try:
+        rating = Rating.get(user)
+        return {
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "username": user.username,
+            "primary_activity": user.primary_activity,
+            "points": user.points+user.frozen_points,
+            "rating_as_executor": rating.rating_as_executor,
+            "rating_as_customer": rating.rating_as_customer,
+        }
+    except:
+        return {"message": "token is wrong"}
 
 
 @router.get("/tasks",
@@ -67,9 +84,9 @@ def get_tasks(request: Request, user: Profile = Depends(TokenAuth)):
                 .filter(
                 ~Q(customer_id=user.pk),
                 executor=None,
-                # status=models.task_statuses[0] # тол0ько новые заказы, пока не работает.
+                status=models.task_statuses[0][0] # только новые заказы.
             )
-        ))
+        )) if user is not None else []
     }
 
 @router.post("/tasks/new")
@@ -85,9 +102,10 @@ async def new_task(request: Request,
                 price=data.price,
                 category=models.Category.objects.get(title=data.category) if not data.category is None else None,
                 address_str=data.address,
-                status=models.task_statuses[0],
+                status=models.task_statuses[0][0],
             )
             obj.save()
+            user.froze_points(obj.price)
             return obj
         obj = await sync_to_async(helper)()
 
