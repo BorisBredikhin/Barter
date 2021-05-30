@@ -4,8 +4,10 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import ru.bredikhinpechnnikov.barter.net.getUserData
 import ru.bredikhinpechnnikov.barter.ui.AppActivity
 import ru.bredikhinpechnnikov.barter.ui.login.LoginFragment
+import ru.bredikhinpechnnikov.barter.userToken
 
 class MainActivity : AppCompatActivity() {
     private var userToken: String? = null
@@ -15,7 +17,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         userToken = getPreferences(Context.MODE_PRIVATE).userToken
-        if (userToken == null)
+
+        if (userToken == null || getUserData(userToken!!) == null)
             supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.fragment, LoginFragment())

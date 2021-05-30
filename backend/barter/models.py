@@ -14,7 +14,7 @@ class Profile(models.Model):
     birthday = models.DateField(null=True)
     primary_activity = models.CharField(max_length=150, null=True)
     phone_number = models.IntegerField(null=True)
-    points = models.IntegerField(validators=[validators.non_negative_validator], default=0)
+    points = models.IntegerField(validators=[validators.non_negative_validator], default=100)
     frozen_points = models.IntegerField(default=0)
 
     def __str__(self):
@@ -115,6 +115,9 @@ class Task(models.Model):
         }
         r["executor"] = self.executor.pk if not self.executor is None else None
         return r
+
+    def notify_customer(self):
+        pass
 
 class Tag(models.Model):
     task = models.ManyToManyField(Task)

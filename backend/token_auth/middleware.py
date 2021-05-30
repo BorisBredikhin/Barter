@@ -30,5 +30,8 @@ class TokenMiddleware:
 async def TokenAuth(request: Request):
     name, token = request.headers["Authorization"].split()
     def get_prof(token):
-        return Token.objects.get(key=token).profile
+        try:
+            return Token.objects.get(key=token).profile
+        except:
+            return None
     return await sync_to_async(get_prof)(token)

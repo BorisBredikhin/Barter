@@ -29,4 +29,5 @@
     <string name="title">Заголовок</string>
     <string name="description">Описание</string>
     <string name="choose">Выбрать</string>
+    <string name="price">Цена:</string>
 </resources>

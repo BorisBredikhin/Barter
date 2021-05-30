@@ -1,5 +1,6 @@
 package ru.bredikhinpechnnikov.barter.ui.adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,17 +9,26 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.bredikhinpechnnikov.barter.R
 import ru.bredikhinpechnnikov.barter.data.model.Task
+import ru.bredikhinpechnnikov.barter.ui.TaskView
 
-class TaskListAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
+class TaskListAdapter(private val tasks: List<Task>, private val token: String) : RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View, val token: String) : RecyclerView.ViewHolder(itemView) {
         fun update(task: Task) {
+            this.task = task
             id = task.id!!
             taskTitle!!.text = task.title
             taskDescription!!.text = task.description
             taskCustomer!!.text = "Заказчик: " // todo add customer's name
             taskPrice!!.text = "Цена: ${task.price} баллов"
             taskAddress!!.text = task.address
+
+            chooseBtn!!.setOnClickListener {
+                val intent = Intent(itemView.context, TaskView::class.java)
+                intent.putExtra("task", task.id)
+                intent.putExtra("token", token)
+                itemView.context.startActivity(intent)
+            }
         }
 
         var taskTitle: TextView? = null
@@ -27,6 +37,7 @@ class TaskListAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<Task
         var taskPrice: TextView? = null
         var taskAddress: TextView? = null
         var chooseBtn: Button? = null
+        var task: Task? = null
         var id: Int = -1
 
         init {
@@ -44,13 +55,13 @@ class TaskListAdapter(private val tasks: List<Task>) : RecyclerView.Adapter<Task
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater
             .from(parent.context)
-            .inflate(R.layout.tasklist_item_layout, parent,  false)
-        return ViewHolder(itemView)
+            .inflate(R.layout.tasklist_item_layout, parent, false)
+        return ViewHolder(itemView, token)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.update(tasks[position])
     }
 
-    override fun getItemCount(): Int =tasks.size
+    override fun getItemCount(): Int = tasks.size
 }

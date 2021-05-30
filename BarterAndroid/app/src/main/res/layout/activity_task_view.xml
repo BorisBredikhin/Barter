@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.TaskView">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/task_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Заказ №123: Вынести мусор"
+            android:textSize="32sp"
+            android:textAlignment="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/task_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10sp"
+            android:layout_marginEnd="10sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/task_title"
+            tools:text="Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа Описанрие заказа "/>
+
+        <TextView
+            android:id="@+id/price_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/price"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/task_description"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/task_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/price_label"
+            android:layout_marginStart="12dp"
+            tools:text="100"
+            app:layout_constraintBaseline_toBaselineOf="@id/price_label"/>
+
+        <TextView
+            android:id="@+id/address_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Адрес: "
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/price_label"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/task_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/address_label"
+            android:layout_marginStart="12dp"
+            tools:text="Admin Admin"/>
+        <Button
+            android:id="@+id/execute_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Исполнить"
+            app:layout_constraintTop_toBottomOf="@id/task_address"
+            android:layout_marginTop="10sp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
