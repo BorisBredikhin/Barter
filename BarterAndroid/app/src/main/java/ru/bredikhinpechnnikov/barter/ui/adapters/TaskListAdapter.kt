@@ -21,6 +21,7 @@ class TaskListAdapter(private val tasks: List<Task>, private val token: String) 
             taskDescription!!.text = task.description
             taskCustomer!!.text = "Заказчик: " // todo add customer's name
             taskPrice!!.text = "Цена: ${task.price} баллов"
+            taskStatus!!.text = "Статус: ${task.status}"
             taskAddress!!.text = task.address
 
             chooseBtn!!.setOnClickListener {
@@ -36,6 +37,7 @@ class TaskListAdapter(private val tasks: List<Task>, private val token: String) 
         var taskCustomer: TextView? = null
         var taskPrice: TextView? = null
         var taskAddress: TextView? = null
+        var taskStatus: TextView? = null
         var chooseBtn: Button? = null
         var task: Task? = null
         var id: Int = -1
@@ -46,6 +48,7 @@ class TaskListAdapter(private val tasks: List<Task>, private val token: String) 
             taskCustomer = itemView.findViewById(R.id.task_customer)
             taskPrice = itemView.findViewById(R.id.task_price)
             taskAddress = itemView.findViewById(R.id.task_address)
+            taskStatus = itemView.findViewById(R.id.task_status)
             chooseBtn = itemView.findViewById(R.id.choose_task_btn)
         }
 

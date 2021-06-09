@@ -27,6 +27,11 @@
         android:layout_height="wrap_content"
         tools:text="TextView"/>
     <TextView
+        android:id="@+id/task_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="TextView"/>
+    <TextView
         android:id="@+id/task_address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

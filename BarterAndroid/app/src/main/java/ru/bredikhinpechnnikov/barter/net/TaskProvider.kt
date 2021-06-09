@@ -106,6 +106,44 @@ object TaskProvider {
 
         return resultTasks
     }
+    fun getMyTasks(token: String): ArrayList<Task> {
+        var resp: String? = null
+
+        val thr = Thread(kotlinx.coroutines.Runnable {
+            OkHttpClient()
+                .newCall(
+                    Request
+                        .Builder()
+                        .url(Config.BACKEND_ADDRESS+"/api/tasks/my")
+                        .header("Authorization", "token $token")
+                        .get()
+                        .build()
+                )
+                .execute()
+                .use {
+                    resp = it.body!!.string()
+                }
+        })
+
+        thr.start()
+        thr.join()
+
+        val resultTasks = ArrayList<Task>()
+
+        try {
+            val jsonObj = JSONObject(resp!!)
+            val tasks = jsonObj.getJSONArray("tasks")
+
+            for (i in 0..tasks.length() - 1) {
+                val currentTask = tasks[i] as JSONObject
+                resultTasks.add(JSONObjectToTask(currentTask))
+            }
+        } finally {
+
+        }
+
+        return resultTasks
+    }
 
     fun getTask(token: String, id: Int): Task {
         var resp: String? = null
@@ -148,4 +186,8 @@ object TaskProvider {
         status = currentTask.getString("status"),
         address = currentTask.getString("address")
     )
+
+    fun confirm(token: String, task: Task) {
+        TODO("Not yet implemented")
+    }
 }

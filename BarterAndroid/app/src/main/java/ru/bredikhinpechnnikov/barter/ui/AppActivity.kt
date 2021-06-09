@@ -63,6 +63,11 @@ class AppActivity : AppCompatActivity() {
                 intent.putExtra("token", token)
                 startActivity(intent)
             }
+            findViewById<Button>(R.id.my_tasks).setOnClickListener {
+                val intent = Intent(applicationContext, MyTasks::class.java)
+                intent.putExtra("token", token)
+                startActivity(intent)
+            }
         }
     }
 

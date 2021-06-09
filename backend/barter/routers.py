@@ -20,13 +20,18 @@ async def hello():
 def get_task(pk: int):
     return models.Task.objects.get(pk=pk).to_dict()
 
-@router.get("/task/execute")
-def execute_task(pk: int):
+@router.get("/tasks/execute")
+def execute_task(pk: int, user: Profile = Depends(TokenAuth)):
     task = models.Task.objects.get(pk=pk)
     try:
         with transaction.atomic():
-            task.status = models.task_statuses[3]
-            models.Profile.transaction_points(task.customer, task.executor, task.price)
+            if task.customer != user:
+                models.Profile.transaction_points(task.customer, user, task.price)
+                task.status = models.task_statuses[1][0]
+            else:
+                user.unfroze_points(task.price)
+                task.status = models.task_statuses[3][0]
+            task.save()
         return {"status": "ok"}
     except IntegrityError as e:
         return {"status": str(e)}
@@ -79,12 +84,25 @@ def get_tasks(request: Request, user: Profile = Depends(TokenAuth)):
     return {
         "tasks": list(map(
             models.Task.to_dict,
-            models.Task.objects\
-            # .all()
+            models.Task.objects \
+                # .all()
                 .filter(
                 ~Q(customer_id=user.pk),
                 executor=None,
                 status=models.task_statuses[0][0] # только новые заказы.
+            )
+        )) if user is not None else []
+    }
+@router.get("/tasks/my",
+            # response_model=schemas.TaskListSchema
+            )
+def get_my_tasks(request: Request, user: Profile = Depends(TokenAuth)):
+    return {
+        "tasks": list(map(
+            models.Task.to_dict,
+            models.Task.objects \
+                .filter(
+                customer_id=user.pk,
             )
         )) if user is not None else []
     }

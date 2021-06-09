@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from barter import validators
-from barter.utils import Dictionable
 
 
 class Profile(models.Model):
@@ -24,14 +23,18 @@ class Profile(models.Model):
         if self.points >= amount:
             self.points -= amount
             self.frozen_points += amount
+            self.save()
 
     def unfroze_points(self, amount):
         self.points += amount
         self.frozen_points -= amount
+        self.save()
 
-    def transaction_points(self, other, amount):
+    def transaction_points(self, other: 'Profile', amount):
         self.frozen_points -= amount
         other.points += amount
+        self.save()
+        other.save()
 
 
 class Category(models.Model):

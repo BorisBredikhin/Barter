@@ -14,6 +14,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BarterAndroid">
+        <activity
+            android:name=".ui.MyTasks"
+            android:label="@string/title_activity_my_tasks"
+            android:theme="@style/Theme.BarterAndroid.NoActionBar">
+        </activity>
         <activity android:name=".ui.TaskView">
         </activity>
         <activity android:name=".ui.new_task.NewTaskActivity">

@@ -35,8 +35,17 @@ class TaskView : AppCompatActivity() {
         TaskAddressView = findViewById(R.id.task_address)
         execute_btn = findViewById(R.id.execute_btn)
 
-        execute_btn!!.setOnClickListener {
-            TaskProvider.execute_task(task_id, token)
+        if (task!!.status == "Новый") {
+            execute_btn!!.setOnClickListener {
+                TaskProvider.execute_task(task_id, token)
+            }
+        } else if (task!!.status == "Ожидает подтверждение") {
+            with(execute_btn!!) {
+                text = "Подтвердить исполнение"
+                setOnClickListener {
+                    TaskProvider.confirm(token, task!!)
+                }
+            }
         }
 
         update()
