@@ -11,9 +11,9 @@ import ru.bredikhinpechnnikov.barter.R
 import ru.bredikhinpechnnikov.barter.data.model.Task
 import ru.bredikhinpechnnikov.barter.ui.TaskView
 
-class TaskListAdapter(private val tasks: List<Task>, private val token: String) : RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
+class TaskListAdapter(private val tasks: List<Task>, private val token: String, val my_tasks: Boolean = false) : RecyclerView.Adapter<TaskListAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View, val token: String) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View, val token: String, val my_tasks: Boolean) : RecyclerView.ViewHolder(itemView) {
         fun update(task: Task) {
             this.task = task
             id = task.id!!
@@ -26,8 +26,11 @@ class TaskListAdapter(private val tasks: List<Task>, private val token: String) 
 
             chooseBtn!!.setOnClickListener {
                 val intent = Intent(itemView.context, TaskView::class.java)
-                intent.putExtra("task", task.id)
-                intent.putExtra("token", token)
+                with(intent) {
+                    putExtra("task", task.id)
+                    putExtra("token", token)
+                    putExtra("my_task", my_tasks)
+                }
                 itemView.context.startActivity(intent)
             }
         }
@@ -59,7 +62,7 @@ class TaskListAdapter(private val tasks: List<Task>, private val token: String) 
         val itemView = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.tasklist_item_layout, parent, false)
-        return ViewHolder(itemView, token)
+        return ViewHolder(itemView, token, my_tasks)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

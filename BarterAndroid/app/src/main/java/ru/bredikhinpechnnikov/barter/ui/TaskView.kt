@@ -1,8 +1,10 @@
 package ru.bredikhinpechnnikov.barter.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import ru.bredikhinpechnnikov.barter.R
@@ -24,6 +26,7 @@ class TaskView : AppCompatActivity() {
         setContentView(R.layout.activity_task_view)
 
         val token = intent.getStringExtra("token")!!
+        val my_task = intent.getBooleanExtra("my_task", false)
 
         task_id = intent.getIntExtra("task", -1)
 
@@ -35,25 +38,28 @@ class TaskView : AppCompatActivity() {
         TaskAddressView = findViewById(R.id.task_address)
         execute_btn = findViewById(R.id.execute_btn)
 
-        if (task!!.status == "Новый") {
-            execute_btn!!.setOnClickListener {
-                TaskProvider.execute_task(task_id, token)
-            }
-        } else if (task!!.status == "Ожидает подтверждение") {
+        if (my_task && task!!.status != "Исполнен") {
             with(execute_btn!!) {
                 text = "Подтвердить исполнение"
                 setOnClickListener {
                     TaskProvider.confirm(token, task!!)
                 }
             }
+        } else if (task!!.status == "Новый") {
+            execute_btn!!.setOnClickListener {
+                TaskProvider.execute_task(task_id, token)
+            }
+        } else if (task!!.status == "Исполнен") {
+            (execute_btn!!.parent as ViewGroup).removeView(execute_btn!!)
         }
 
         update()
     }
 
+    @SuppressLint("SetTextI18n")
     fun update(){
         TaskTitleView!!.text = "Заказ №${task_id}: ${task!!.title}"
-        TaskDescriptionView!!.text = task!!.description
+        TaskDescriptionView!!.text = "Заказчик: ${task!!.customer_str}\n${task!!.description}"
         TaskPriceView!!.text = "${task!!.price} б."
         TaskAddressView!!.text = task!!.address
     }

@@ -23,6 +23,6 @@ class MyTasks : AppCompatActivity() {
         taskRecyclerView.layoutManager = LinearLayoutManager(this).also {
             it.orientation = LinearLayoutManager.VERTICAL
         }
-        taskRecyclerView.adapter = TaskListAdapter(getMyTasks(token!!), token!!)
+        taskRecyclerView.adapter = TaskListAdapter(getMyTasks(token!!), token!!, true)
     }
 }

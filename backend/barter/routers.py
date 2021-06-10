@@ -25,16 +25,26 @@ def execute_task(pk: int, user: Profile = Depends(TokenAuth)):
     task = models.Task.objects.get(pk=pk)
     try:
         with transaction.atomic():
-            if task.customer != user:
+            task.executor = user
+            if task.customer == user:
                 models.Profile.transaction_points(task.customer, user, task.price)
                 task.status = models.task_statuses[1][0]
             else:
-                user.unfroze_points(task.price)
-                task.status = models.task_statuses[3][0]
+                task.status = models.task_statuses[2][0]
             task.save()
         return {"status": "ok"}
     except IntegrityError as e:
         return {"status": str(e)}
+
+@router.get("/tasks/confirm")
+def confirm_task(pk: int, user: Profile = Depends(TokenAuth)):
+    task = models.Task.objects.get(pk=pk)
+    if task.customer.pk != user.pk:
+        return {"status": "error: only a customer can confirm the task"}
+    task.status = models.task_statuses[3][0]
+    user.unfroze_points(task.price)
+    task.save()
+    return {"status": "ok"}
 
 @router.post(
     '/register/',
@@ -101,9 +111,7 @@ def get_my_tasks(request: Request, user: Profile = Depends(TokenAuth)):
         "tasks": list(map(
             models.Task.to_dict,
             models.Task.objects \
-                .filter(
-                customer_id=user.pk,
-            )
+                .filter(Q(customer_id=user.pk) | Q(executor=user))
         )) if user is not None else []
     }
 

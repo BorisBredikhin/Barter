@@ -109,6 +109,7 @@ class Task(models.Model):
     def to_dict(self) -> dict:
         r = {
             "customer": self.customer.pk,
+            "customer_str": self.customer.first_name + " " + self.customer.last_name,
             "title": self.title,
             "description": self.description,
             "price": self.price,
@@ -117,6 +118,7 @@ class Task(models.Model):
             "id": self.pk
         }
         r["executor"] = self.executor.pk if not self.executor is None else None
+        r["executor_str"] = self.customer.first_name + " " + self.customer.last_name if not self.executor is None else None
         return r
 
     def notify_customer(self):

@@ -10,7 +10,7 @@ app = APIRouter()
 
 @app.post('/login/')
 def login(data: LoginSchema):
-    user = Profile.objects.get(password = hashlib.sha1(data.password.encode("utf-8")).hexdigest())
+    user = Profile.objects.get(username=data.username, password = hashlib.sha1(data.password.encode("utf-8")).hexdigest())
 
     if user is not None:
         token = Token.objects.get(profile=user.pk)

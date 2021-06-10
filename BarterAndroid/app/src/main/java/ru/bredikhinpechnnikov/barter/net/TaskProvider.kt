@@ -175,8 +175,14 @@ object TaskProvider {
     private fun JSONObjectToTask(currentTask: JSONObject) = Task(
         id = currentTask.getInt("id"),
         customer = currentTask.getInt("customer"),
+        customer_str = currentTask.getString("customer_str"),
         executor = try {
             currentTask.getInt("executor")
+        } catch (e: JSONException) {
+            null
+        },
+        executor_str = try {
+            currentTask.getString("executor_str")
         } catch (e: JSONException) {
             null
         },
@@ -188,6 +194,25 @@ object TaskProvider {
     )
 
     fun confirm(token: String, task: Task) {
-        TODO("Not yet implemented")
+        var resp: String? = null
+
+        val thr = Thread(kotlinx.coroutines.Runnable {
+            OkHttpClient()
+                .newCall(
+                    Request
+                        .Builder()
+                        .url(Config.BACKEND_ADDRESS+"/api/tasks/confirm?pk="+task.id.toString())
+                        .header("Authorization", "token $token")
+                        .get()
+                        .build()
+                )
+                .execute()
+                .use {
+                    resp = it.body!!.string()
+                }
+        })
+
+        thr.start()
+        thr.join()
     }
 }
